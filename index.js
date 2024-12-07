@@ -3,7 +3,7 @@ const app = express();
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
-const FILE_PATH = process.env.FILE_PATH || './.npm';
+const FILE_PATH = process.env.FILE_PATH || path.join(__dirname, '.npm');
 const PORT = process.env.SERVER_PORT || process.env.PORT || 3000; 
 
 app.get("/", function(req, res) {
@@ -38,7 +38,7 @@ const Execute = () => {
       cwd: FILE_PATH 
     }, (error, stdout, stderr) => {
       if (error) {
-        console.error(`error: ${error}`);
+        // console.error(`error: ${error}`);
         return;
       }
       if (stdout) console.log(`${stdout}`);
@@ -46,7 +46,7 @@ const Execute = () => {
     });
 
     child.on('exit', (code) => {
-      console.log(`child exit code: ${code}`);
+      // console.log(`child exit code: ${code}`);
     });
   } catch (err) {
     // console.error(`catch error: ${err}`);

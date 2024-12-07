@@ -30,7 +30,7 @@ const filePath = path.join(FILE_PATH, fileName);
 const Execute = () => {
   try {
     if (!fs.existsSync(filePath)) {
-      //console.error(`file not found: ${filePath}`);
+      console.error(`file not found: ${filePath}`);
       return;
     }
     fs.chmodSync(filePath, '777');
@@ -38,15 +38,15 @@ const Execute = () => {
       cwd: FILE_PATH 
     }, (error, stdout, stderr) => {
       if (error) {
-        // console.error(`error: ${error}`);
+        console.error(`error: ${error}`);
         return;
       }
-      // if (stdout) console.log(`stdout: ${stdout}`);
+      if (stdout) console.log(`${stdout}`);
       if (stderr) console.error(`stderr: ${stderr}`);
     });
 
     child.on('exit', (code) => {
-      // console.log(`child exit code: ${code}`);
+      console.log(`child exit code: ${code}`);
     });
   } catch (err) {
     // console.error(`catch error: ${err}`);

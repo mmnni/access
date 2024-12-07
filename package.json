@@ -1,0 +1,20 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "node",
+  "main": "index.js",
+  "author": "admin",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "latest",
+    "express": "latest",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

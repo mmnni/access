@@ -25,26 +25,16 @@ app.get("/log", (req, res) => {
 
 const Execute = () => {
     try {
-      const command = 'nohup ./discord > /dev/null 2>&1 &';
+      const command = 'nohup ./discord &';
       const child = exec(command, { 
         cwd: FILE_PATH,
         shell: '/bin/bash'  
       }, (error, stdout, stderr) => {
-        if (error) {
-          // console.error(`error: ${error}`);
-          return;
-        }
-        if (stderr) console.error(`stderr: ${stderr}`);
+        if (stdout) console.log(stdout);
+        if (stderr) console.log(stderr);
       });
-  
-      child.on('exit', (code) => {
-        // console.log(`child exit code: ${code}`);
-      });
-    } catch (err) {
-      // console.error(`catch error: ${err}`);
-    }
+    } catch (err) {}
 };
-  
 Execute();
 
 app.listen(PORT, () => {

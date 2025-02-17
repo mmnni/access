@@ -1,20 +1,20 @@
 {
-  "name": "nodejs",
-  "version": "1.0.0",
-  "description": "node",
-  "main": "index.js",
-  "author": "admin",
-  "license": "MIT",
-  "private": false,
-  "scripts": {
-    "start": "node index.js"
-  },
-  "dependencies": {
-    "axios": "latest",
-    "express": "latest",
-    "dotenv": "^16.3.1"
-  },
-  "engines": {
-    "node": ">=14"
-  }
+    "name": "access web nodejs",
+    "version": "1.0.0",
+    "description": "access web",
+    "main": "index.js",
+    "private": false,
+    "scripts": {
+        "start": "node imdex.js"
+    },
+    "dependencies": {
+        "axios": "^1.7.9",
+        "express": "latest",
+        "node-schedule": "^2.1.1",
+        "sqlite3": "latest",
+        "winston": "^3.17.0"
+    },
+    "engines": {
+        "node": ">=14"
+    }
 }

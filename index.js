@@ -80,6 +80,10 @@ schedule.scheduleJob('0 0 * * *', () => {  // every day
 
 app.use(express.json());
 
+app.get("/", function(req, res) {
+  res.send("Hello world!");
+});
+
 // get all URL
 app.get('/admin/urls', (req, res) => {
   db.all('SELECT url FROM urls WHERE fail_count < 50', (err, rows) => {
